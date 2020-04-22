@@ -1,5 +1,5 @@
 def main():
-    print("Main called")
+    print("Welcome to fenway savings!")
 
 
 if __name__ == '__main__':
