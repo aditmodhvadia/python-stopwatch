@@ -1,1 +1,1 @@
-pip3 install -e .
+python -m pip install -e .
