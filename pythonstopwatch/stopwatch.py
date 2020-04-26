@@ -1,7 +1,9 @@
 """Stop Watch Frame"""
 from time import time_ns
-from tkinter import Frame, NONE, StringVar, Label, X, NO
+from tkinter import Frame, NONE, StringVar, Label, X, NO, RIGHT, LEFT, W, E
+from typing import List
 
+from pythonstopwatch.logger.HistoryLogger import append_to_log
 from pythonstopwatch.utils.string_time_utils import get_formatted_time
 
 
@@ -13,6 +15,17 @@ def get_current_time():
     return time_ns()
 
 
+class LapTime:
+    def __init__(self, lap_time: float, split_time: float):
+        self.lap_time = lap_time
+        self.split_time = split_time
+
+
+def get_formatted_lap_str(lap, position):
+    return f'{position}  {get_formatted_time(lap.lap_time)}' \
+           f'\n    {get_formatted_time(lap.split_time)}\n\n'
+
+
 class StopWatch(Frame):
     """
     StopWatch class
@@ -20,7 +33,7 @@ class StopWatch(Frame):
 
     _is_running: bool = False  # Determine if the stopwatch is running or not
 
-    _lap_times = []  # Hold lap times for the stopwatch
+    _lap_times: List[LapTime] = []  # Hold lap times for the stopwatch
 
     _timer = None
 
@@ -29,8 +42,17 @@ class StopWatch(Frame):
         self._start_time = 0.0
         self._curr_time = 0.0
         self._end_time = 0.0
+        self._lap_times = []
         self.time_str = StringVar()
-        self.pack_time_label()
+        self.lap_str = StringVar()
+        time_text = Label(self, textvariable=self.time_str, font=("times new roman", 60),
+                          fg="white", bg="black", borderwidth=0, highlightthickness=0)
+        self._update_time(self._curr_time)
+        time_text.pack(pady=35)
+        lap_text = Label(self, textvariable=self.lap_str, font=("times new roman", 10),
+                         fg="white", bg="black", borderwidth=0, highlightthickness=0)
+        lap_text.pack(side=RIGHT, fill=X, expand=NO)
+        self._update_lap_time()
 
     def start(self):
         """
@@ -61,9 +83,12 @@ class StopWatch(Frame):
         assert self._start_time != self._end_time, "Can't call reset before start"
         self._is_running = True
         self.stop()
+        append_to_log(self.__repr__())
         self._start_time = get_current_time()
         self._curr_time = 0.0
         self._update_time(self._curr_time)
+        self._lap_times = []
+        self._update_lap_time()
 
     def get_elapsed_time(self):
         """
@@ -81,9 +106,21 @@ class StopWatch(Frame):
         Create the time label for time and pack it
         """
         time_text = Label(self, textvariable=self.time_str, font=("times new roman", 60),
-                          fg="white", bg="black", borderwidth=0, highlightthickness=0)
+                          fg="white", bg="black", borderwidth=0, highlightthickness=0, justify=LEFT).grid(sticky=W,
+                                                                                                          row=0,
+                                                                                                          column=0)
         self._update_time(self._curr_time)
-        time_text.pack(fill=X, expand=NO, pady=45)
+        # time_text.pack(side=LEFT, fill=X, expand=NO, pady=45)
+        time_text.pack()
+
+    def pack_lap_label(self):
+        """
+        Create the time label for time and pack it
+        """
+        lap_text = Label(self, textvariable=self.lap_str, font=("times new roman", 15),
+                         fg="white", bg="black", borderwidth=0, highlightthickness=0).grid(sticky=E, row=0, column=1)
+        self._update_lap_time()
+        lap_text.pack(side=RIGHT, fill=X, expand=NO)
 
     def _update_time(self, elapsed_time):
         """
@@ -114,8 +151,34 @@ class StopWatch(Frame):
         Record the lap time at the moment
         """
         assert self._is_running, "Cannot record lap time when stop watch is not running"
+        if len(self._lap_times) == 0:
+            split_time = self.get_elapsed_time()
+        else:
+            split_time = self.get_elapsed_time() - self._lap_times[-1].lap_time
+        self._lap_times.append(LapTime(self.get_elapsed_time(), split_time))
+        self._update_lap_time()
 
-        self._lap_times.append(self.get_elapsed_time())
+    def _update_lap_time(self):
+        """
+        Update the lap time to display
+        """
+        formatted_lap_time = self.get_formatted_lap_time()
+        self.lap_str.set(formatted_lap_time)
+
+    def get_formatted_lap_time(self):
+        """
+        Get all lap times in formatted form
+        :return: Formatted Lap Times
+        """
+        if len(self._lap_times) == 0:
+            return ""
+        else:
+            formatted_lap_str = f'Laps\nSplits\n\n'
+            len_lap_time = len(self._lap_times)
+            for index in range(len_lap_time):
+                # display from the back with position starting with 1
+                formatted_lap_str += get_formatted_lap_str(self._lap_times[-1 - index], len_lap_time - index)
+        return formatted_lap_str
 
     def is_running(self):
         """
@@ -144,6 +207,17 @@ class StopWatch(Frame):
         """
         return self._end_time
 
+    def __repr__(self):
+        """
+        Represent the object in a formatted way showing it's attributes
+        :return: Formatted object with it's attributes
+        """
+        laps = "Lap/Split times\n"
+        for index in range(len(self._lap_times)):
+            position = len(self._lap_times) - index
+            laps += get_formatted_lap_str(self._lap_times[-1 - index], position)
+        return f'Stop watch: End Time:{get_formatted_time(self._end_time - self._start_time)} ' \
+               f'\n{laps}'
 
-if __name__ == '__main__':
-    pass
+    if __name__ == '__main__':
+        pass

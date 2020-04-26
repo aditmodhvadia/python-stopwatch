@@ -3,7 +3,7 @@
 
 def get_formatted_time(time):
     """
-    Format the given time in nanoseconds into hours:minutes:seconds:milliseconds
+    Format the given time in nanoseconds into hours:minutes:seconds.milliseconds
     :param time: time in seconds
     :return: formatted time
     """
@@ -12,7 +12,7 @@ def get_formatted_time(time):
     minutes = int(time / 10 ** 9 / 60)
     seconds = int(round(time / 10 ** 9 - minutes * 60.0, 2))
     milli_seconds = int(round((time / 10 ** 9 - minutes * 60.0 - seconds) * 100, 2))
-    return f'{hours:02d}:{minutes:02d}:{seconds:02d}:{milli_seconds:02d}'
+    return f'{hours:02d}:{minutes:02d}:{seconds:02d}.{milli_seconds:02d}'
 
 
 def get_seconds_from_nanoseconds(nanoseconds) -> int:
