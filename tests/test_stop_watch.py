@@ -13,13 +13,13 @@ class MyTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
         super().setUp()
-        root = Tk()  # blank window
-        root.title(PROJECT_TITLE)
-        root['bg'] = BG_COLOR
-        root.geometry("0x0")  # give size to the window
-        root.resizable(False, False)
-        self.stop_watch = StopWatch(root)
-        root.update()
+        # root = Tk()  # blank window
+        # root.title(PROJECT_TITLE)
+        # root['bg'] = BG_COLOR
+        # root.geometry("0x0")  # give size to the window
+        # root.resizable(False, False)
+        self.stop_watch = StopWatch(None)
+        # root.update()
 
     def test_stop_before_start(self):
         """
