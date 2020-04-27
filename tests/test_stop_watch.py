@@ -1,5 +1,6 @@
 import time
 import unittest
+from tkinter import Tk
 
 from pythonstopwatch.stopwatch import StopWatch
 from pythonstopwatch.utils.string_time_utils import get_seconds_from_nanoseconds
@@ -10,7 +11,8 @@ class MyTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
         super().setUp()
-        self.stop_watch = StopWatch(None)
+        root = Tk()  # blank window
+        self.stop_watch = StopWatch(root)
 
     def test_stop_before_start(self):
         """
@@ -59,7 +61,7 @@ class MyTestCase(unittest.TestCase):
         time.sleep(.05)
         self.stop_watch.lap_time()
         self.stop_watch.stop()
-        self.assertEquals(3, len(self.stop_watch.get_lap_times()))
+        self.assertEqual(3, len(self.stop_watch.get_lap_times()))
 
         pass
 
