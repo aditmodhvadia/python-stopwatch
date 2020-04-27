@@ -14,7 +14,7 @@ Install using this command:
 ```shell script
 pip3 install -e .
 ```
-##Run the programme by entering the following in console/terminal
+##Run the programme by entering the following in console/terminal anywhere
 ```commandline
 pstopwatch
 ```
