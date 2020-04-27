@@ -2,6 +2,8 @@ import time
 import unittest
 from tkinter import Tk
 
+from pythonstopwatch.constants.colors import BG_COLOR
+from pythonstopwatch.constants.strings import PROJECT_TITLE
 from pythonstopwatch.stopwatch import StopWatch
 from pythonstopwatch.utils.string_time_utils import get_seconds_from_nanoseconds
 
@@ -12,6 +14,10 @@ class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
         root = Tk()  # blank window
+        root.title(PROJECT_TITLE)
+        root['bg'] = BG_COLOR
+        root.geometry("900x600")  # give size to the window
+        root.resizable(False, False)
         self.stop_watch = StopWatch(root)
 
     def test_stop_before_start(self):
@@ -33,7 +39,7 @@ class MyTestCase(unittest.TestCase):
         """
         self.stop_watch.start()
         self.stop_watch.reset()
-        self.stop_watch.reset()
+        self.assertRaises(AssertionError, self.stop_watch.reset)
 
     def test_normal_flow(self):
         """
