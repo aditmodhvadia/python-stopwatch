@@ -4,7 +4,7 @@ A Python GUI for stopwatch.
 ## Installation
 Clone the repository:
 ```commandline
-git clone https://github.com/aditmodhvadia/fenway-savings.git
+git clone https://github.com/aditmodhvadia/python-stopwatch.git
 ```
 Go inside the repository:
 ```commandline
@@ -19,7 +19,12 @@ pip3 install -e .
 pstopwatch
 ```
 
-## Run unit tests
+## To Run unit tests
 ```commandline
 python -m unittest discover -s tests
+```
+
+## To bundle the project
+```commandline
+python3 setup.py sdist bdist_wheel
 ```

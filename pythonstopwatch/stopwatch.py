@@ -1,9 +1,9 @@
 """Stop Watch Frame"""
 from time import time_ns
-from tkinter import Frame, NONE, StringVar, Label, X, NO, RIGHT, LEFT, W, E
+from tkinter import Frame, NONE, StringVar, Label, X, NO, RIGHT
 from typing import List
 
-from pythonstopwatch.logger.HistoryLogger import append_to_log
+from pythonstopwatch.logger.history_logger import append_to_log
 from pythonstopwatch.utils.string_time_utils import get_formatted_time
 
 
@@ -16,12 +16,23 @@ def get_current_time():
 
 
 class LapTime:
+    """
+    LapTime Class
+    """
+
     def __init__(self, lap_time: float, split_time: float):
+        """__init__"""
         self.lap_time = lap_time
         self.split_time = split_time
 
 
 def get_formatted_lap_str(lap, position):
+    """
+    Get the Lap Time for the given lap in the format
+    :param lap: given lap
+    :param position: position of lap
+    :return: Formatted lap
+    """
     return f'{position}  {get_formatted_time(lap.lap_time)}' \
            f'\n    {get_formatted_time(lap.split_time)}\n\n'
 
@@ -101,27 +112,6 @@ class StopWatch(Frame):
             elapsed_time = self._end_time - self._start_time
         return elapsed_time
 
-    def pack_time_label(self):
-        """
-        Create the time label for time and pack it
-        """
-        time_text = Label(self, textvariable=self.time_str, font=("times new roman", 60),
-                          fg="white", bg="black", borderwidth=0, highlightthickness=0, justify=LEFT).grid(sticky=W,
-                                                                                                          row=0,
-                                                                                                          column=0)
-        self._update_time(self._curr_time)
-        # time_text.pack(side=LEFT, fill=X, expand=NO, pady=45)
-        time_text.pack()
-
-    def pack_lap_label(self):
-        """
-        Create the time label for time and pack it
-        """
-        lap_text = Label(self, textvariable=self.lap_str, font=("times new roman", 15),
-                         fg="white", bg="black", borderwidth=0, highlightthickness=0).grid(sticky=E, row=0, column=1)
-        self._update_lap_time()
-        lap_text.pack(side=RIGHT, fill=X, expand=NO)
-
     def _update_time(self, elapsed_time):
         """
         Update the time to display
@@ -170,14 +160,14 @@ class StopWatch(Frame):
         Get all lap times in formatted form
         :return: Formatted Lap Times
         """
-        if len(self._lap_times) == 0:
-            return ""
-        else:
+        formatted_lap_str = ''
+        if len(self._lap_times) != 0:
             formatted_lap_str = f'Laps\nSplits\n\n'
             len_lap_time = len(self._lap_times)
             for index in range(len_lap_time):
                 # display from the back with position starting with 1
-                formatted_lap_str += get_formatted_lap_str(self._lap_times[-1 - index], len_lap_time - index)
+                formatted_lap_str += \
+                    get_formatted_lap_str(self._lap_times[-1 - index], len_lap_time - index)
         return formatted_lap_str
 
     def is_running(self):

@@ -45,6 +45,10 @@ def reset_pressed(stop_watch: StopWatch, stop_button, reset_button, lap_button, 
 
 
 def lap_pressed(stop_watch):
+    """
+    Record a Lap/Split time event
+    :param stop_watch: Stop Watch
+    """
     stop_watch.lap_time()
 
 
@@ -62,7 +66,8 @@ def main():
     bottom_frame = Frame(root)
     top_frame.pack()
     bottom_frame.pack(side=BOTTOM)
-    copyright_label = Label(bottom_frame, text=COPYRIGHT_TEXT, bg=BG_COLOR, fg=TEXT_COLOR)  # only for aesthetics
+    # only for aesthetics
+    copyright_label = Label(bottom_frame, text=COPYRIGHT_TEXT, bg=BG_COLOR, fg=TEXT_COLOR)
     stop_watch.pack(side=TOP)
     copyright_label.pack(side=BOTTOM)
 
@@ -70,8 +75,10 @@ def main():
     root_dir = os.path.dirname(os.path.abspath(__file__))
     play_image = PhotoImage(file=os.path.join(root_dir + os.sep + 'assets' + os.sep + 'play.png'))
     pause_image = PhotoImage(file=os.path.join(root_dir + os.sep + 'assets' + os.sep + 'pause.png'))
-    reset_image = PhotoImage(file=os.path.join(root_dir + os.sep + 'assets' + os.sep + 'reset_enabled.png'))
-    lap_image = PhotoImage(file=os.path.join(root_dir + os.sep + 'assets' + os.sep + 'lap_split.png'))
+    reset_image = PhotoImage(file=os.path.join(root_dir + os.sep +
+                                               'assets' + os.sep + 'reset_enabled.png'))
+    lap_image = PhotoImage(file=os.path.join(root_dir + os.sep
+                                             + 'assets' + os.sep + 'lap_split.png'))
 
     sub_sample_size = 7
     play_image = play_image.subsample(sub_sample_size)

@@ -1,7 +1,7 @@
 """Logs history of the stop watch"""
 import os
 
-log_file_name = "stop_watch_history.txt"
+LOG_FILE_NAME = "stop_watch_history.txt"
 
 
 def append_to_log(data: str):
@@ -12,9 +12,9 @@ def append_to_log(data: str):
     root_dir = os.path.dirname(os.path.abspath(__file__))
 
     try:
-        f = open(os.path.join(root_dir + os.sep + log_file_name), "a")  # open in append mode
-        f.write(data)
-        f.close()
+        log_file = open(os.path.join(root_dir + os.sep + LOG_FILE_NAME), "a")  # open in append mode
+        log_file.write(data)
+        log_file.close()
     except FileNotFoundError:
         print("Error occurred, File not found")
     finally:
