@@ -1,2 +1,2 @@
 pip~=20.3
-setuptools~=41.2.0
+setuptools~=51.0.0
